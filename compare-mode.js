@@ -5,10 +5,10 @@ var dhash = require('./lib/dhash');
 var config = require('./config');
 
 var yargs = require('yargs')
-		.boolean(['alternative'])
-		.alias('a', 'alternative')
-		.alias('histogram', 'alternative')
-		.alias('h', 'alternative');
+    .boolean(['alternative'])
+    .alias('a', 'alternative')
+    .alias('histogram', 'alternative')
+    .alias('h', 'alternative');
 var argv = yargs.argv;
 
 // 3fps = 3hz = www.3hz.co.jp
@@ -23,47 +23,47 @@ console.log('>> WITA? > What is that anime?');
 console.log('> Image to video comparer');
 
 if (argv._.length === 2) {
-	videoPath = argv._[0];
-	imagePath = argv._[1];
+  videoPath = argv._[0];
+  imagePath = argv._[1];
 } else if (argv._.length === 1){
   videoPath = false;
   imagePath = argv._[0];
   console.log('It will return only the image\'s hash');
 } else {
-	console.log('\nUsage:');
-	console.log('  node compare-mode [video-file] [image-file]');
-	console.log('  -a --alternative Uses alternative method');
-	process.exit();
+  console.log('\nUsage:');
+  console.log('  node compare-mode [video-file] [image-file]');
+  console.log('  -a --alternative Uses alternative method');
+  process.exit();
 }
 
 // Always use ffmpeg to encode video and images to prevent problems with multiple resizing algorithms:
 var ffmpegProcess = spawn('ffmpeg', argv.alternative ?
     [
-		'-i', imagePath,
-		'-vf', 'format=gray,scale=9x8',
-		'-vsync', '0',
-		'-f', 'image2pipe',
-		'-vcodec', 'png',
-		'pipe:1',
     '-i', imagePath,
-		'-vf', 'scale=2x2',
-		'-vsync', '0',
-		'-f', 'image2pipe',
-		'-vcodec', 'png',
-		'pipe:3'] :
+    '-vf', 'format=gray,scale=9x8',
+    '-vsync', '0',
+    '-f', 'image2pipe',
+    '-vcodec', 'png',
+    'pipe:1',
+    '-i', imagePath,
+    '-vf', 'scale=2x2',
+    '-vsync', '0',
+    '-f', 'image2pipe',
+    '-vcodec', 'png',
+    'pipe:3'] :
     [ '-i', imagePath,
-		'-vf', 'scale=9x8,format=gray',
-		'-vsync', '0',
-		'-f', 'image2pipe',
-		'-vcodec', 'png',
-		'pipe:1'], {
+    '-vf', 'scale=9x8,format=gray',
+    '-vsync', '0',
+    '-f', 'image2pipe',
+    '-vcodec', 'png',
+    'pipe:1'], {
       stdio: argv.alternative ? ['pipe', 'pipe', 'pipe', 'pipe'] : null
     }),
-		errorLog = '';
-		
+    errorLog = '';
+    
 ffmpegProcess.stderr.setEncoding('utf-8');
 ffmpegProcess.stderr.on('data', function (err) {
-	errorLog += err;
+  errorLog += err;
 });
 
 var alternatePromise;
@@ -81,8 +81,8 @@ if (argv.alternative) {
 }
 
 ffmpegProcess.stdout.on('data', function (image) {
-	dhash.stream(image, function (err, hash) {
-		if (err) throw err;
+  dhash.stream(image, function (err, hash) {
+    if (err) throw err;
     
     if (argv.alternative) {
       alternatePromise.then(function(colorHash){
@@ -91,75 +91,75 @@ ffmpegProcess.stdout.on('data', function (image) {
     } else {
       processVideo(videoPath, hash);
     }
-	}, argv.alternative);
+  }, argv.alternative);
 });
 
 ffmpegProcess.on('close', function (exitCode) {
-	if (exitCode !== 0) {
-		console.log('Error', exitCode);
-		console.log(errorLog);
-	}
+  if (exitCode !== 0) {
+    console.log('Error', exitCode);
+    console.log(errorLog);
+  }
 });
 
 function processVideo(videoPath, targetHash) {
-	var foundHashes = {};
-	var processingEnded = 0;
-	var frameCount = 0;
-	var hashesFound = 0;
+  var foundHashes = {};
+  var processingEnded = 0;
+  var frameCount = 0;
+  var hashesFound = 0;
   
   if (videoPath === false) {
     processingEnded = 1;
     waitJobs();
     return;
   }
-	
-	var speed;
-	var start = Date.now();
-	var partialSpeed = 0;
-	var speedInterval = setInterval(function () {
-		speed = partialSpeed;
-		partialSpeed = 0;
-		process.stdout.write('\033[2K\033[0G> ' + frameCount + ' frames found ~ ' + speed + ' fps ');
-	}, 1000);
+  
+  var speed;
+  var start = Date.now();
+  var partialSpeed = 0;
+  var speedInterval = setInterval(function () {
+    speed = partialSpeed;
+    partialSpeed = 0;
+    process.stdout.write('\033[2K\033[0G> ' + frameCount + ' frames found ~ ' + speed + ' fps ');
+  }, 1000);
 
-	var ffmpegProcess = spawn('ffmpeg', argv.alternative ? [
-		'-i', videoPath,
-		'-vf', 'fps=fps=' + FPS_CONST + ',format=gray,scale=9x8',
-		'-vsync', '0',
-		'-f', 'image2pipe',
-		'-vcodec', 'png',
-		'pipe:1',
+  var ffmpegProcess = spawn('ffmpeg', argv.alternative ? [
+    '-i', videoPath,
+    '-vf', 'fps=fps=' + FPS_CONST + ',format=gray,scale=9x8',
+    '-vsync', '0',
+    '-f', 'image2pipe',
+    '-vcodec', 'png',
+    'pipe:1',
     
-		'-i', videoPath,
-		'-vf', 'fps=fps=' + FPS_CONST + ',scale=2x2',
-		'-vsync', '0',
-		'-f', 'image2pipe',
-		'-vcodec', 'png',
-		'pipe:3'] : [
-		'-i', videoPath,
-		'-vf', 'fps=fps=' + FPS_CONST + ',scale=9x8,format=gray',
-		'-vsync', '0',
-		'-f', 'image2pipe',
-		'-vcodec', 'png',
-		'pipe:1'], {
+    '-i', videoPath,
+    '-vf', 'fps=fps=' + FPS_CONST + ',scale=2x2',
+    '-vsync', '0',
+    '-f', 'image2pipe',
+    '-vcodec', 'png',
+    'pipe:3'] : [
+    '-i', videoPath,
+    '-vf', 'fps=fps=' + FPS_CONST + ',scale=9x8,format=gray',
+    '-vsync', '0',
+    '-f', 'image2pipe',
+    '-vcodec', 'png',
+    'pipe:1'], {
       stdio: argv.alternative ? ['pipe', 'pipe', 'pipe', 'pipe'] : null
     });
-		
-	var errorBuffer = '', duration;
-	
-	ffmpegProcess.stderr.setEncoding('utf-8');
-	ffmpegProcess.stderr.on('data', function durationListener (data) {
-		if (duration = data.match(/\d\d:\d\d:\d\d\.\d\d/)) {
-			duration = duration[0].match(/\d+/g).reduce(function (t, e, n) {
-				return t + parseInt(e) * [3600, 60, 1, 0.01][n];
-			}, 0);
-			ffmpegProcess.stderr.removeListener('data', durationListener);
-		}
-	});
-	ffmpegProcess.stderr.on('data', function (data) {
-		errorBuffer += data;
-	});
-	
+    
+  var errorBuffer = '', duration;
+  
+  ffmpegProcess.stderr.setEncoding('utf-8');
+  ffmpegProcess.stderr.on('data', function durationListener (data) {
+    if (duration = data.match(/\d\d:\d\d:\d\d\.\d\d/)) {
+      duration = duration[0].match(/\d+/g).reduce(function (t, e, n) {
+        return t + parseInt(e) * [3600, 60, 1, 0.01][n];
+      }, 0);
+      ffmpegProcess.stderr.removeListener('data', durationListener);
+    }
+  });
+  ffmpegProcess.stderr.on('data', function (data) {
+    errorBuffer += data;
+  });
+  
   var lastHash;
   if (argv.alternative) {
     ffmpegProcess.stdout.on('data', function (data) {
@@ -177,7 +177,7 @@ function processVideo(videoPath, targetHash) {
         }
       });
     });
-	} else {
+  } else {
     ffmpegProcess.stdout.on('data', function (data) {
       partialSpeed++; frameCount++;
       dhash.stream(data, function (err, frameHash) {
@@ -188,37 +188,37 @@ function processVideo(videoPath, targetHash) {
     });
   }
   
-	ffmpegProcess.on('close', function(exitCode) {
-		console.log('> Exit code: ' + exitCode);
-		clearInterval(speedInterval);
-		if (exitCode !== 0) {
-			console.log(errorBuffer);
-		}
-		setTimeout(next, 100);
-	});
-	
-	function next () {
-		console.log('> Finalized', ((Date.now() - start) / 1000).toFixed(1), 'seconds');
-		processingEnded++;
-		waitJobs();
-	}
-	
-	function waitJobs () {
-		if (processingEnded !== 1) {
-			return;
-		}
-		processingEnded++;
-		
-		console.log(targetHash.replace(/(.{8})(.{8})(.{8})?/, '$1 $2 $3'), '<-  target hash');
-		console.log(Object.keys(foundHashes).map(function (e) {
-			return [distance(targetHash, e), e];
-		}).sort(function (a, b) {
-			return a[0] - b[0];
-		}).slice(0, 20).map(function (e) {
-			return e[1].replace(/(.{8})(.{8})(.{8})?/, '$1 $2 $3') + ('   ' + e[0]).substr(-3) +
+  ffmpegProcess.on('close', function(exitCode) {
+    console.log('> Exit code: ' + exitCode);
+    clearInterval(speedInterval);
+    if (exitCode !== 0) {
+      console.log(errorBuffer);
+    }
+    setTimeout(next, 100);
+  });
+  
+  function next () {
+    console.log('> Finalized', ((Date.now() - start) / 1000).toFixed(1), 'seconds');
+    processingEnded++;
+    waitJobs();
+  }
+  
+  function waitJobs () {
+    if (processingEnded !== 1) {
+      return;
+    }
+    processingEnded++;
+    
+    console.log(targetHash.replace(/(.{8})(.{8})(.{8})?/, '$1 $2 $3'), '<-  target hash');
+    console.log(Object.keys(foundHashes).map(function (e) {
+      return [distance(targetHash, e), e];
+    }).sort(function (a, b) {
+      return a[0] - b[0];
+    }).slice(0, 20).map(function (e) {
+      return e[1].replace(/(.{8})(.{8})(.{8})?/, '$1 $2 $3') + ('   ' + e[0]).substr(-3) +
         ('                ' + toHMS(foundHashes[e[1]] * duration / frameCount)).substr(-13); //+ ', ' + FPS_CONST;
-		}).join('\n'));
-	}
+    }).join('\n'));
+  }
 }
 
 function alternativeDistance(from, to) {
@@ -233,6 +233,6 @@ function alternativeDistance(from, to) {
 }
 
 function toHMS (seconds) {
-	return ('00' + ((seconds % 3600) / 60 | 0)).substr(-2) + ':' +
-				 ('00' + (seconds % 60).toFixed(3)).substr(-6);
+  return ('00' + ((seconds % 3600) / 60 | 0)).substr(-2) + ':' +
+         ('00' + (seconds % 60).toFixed(3)).substr(-6);
 }

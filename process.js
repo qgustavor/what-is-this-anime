@@ -8,15 +8,15 @@ var glob = require('glob');
 var config = require('./config');
 
 var argv = require('yargs')
-		.boolean(['alternative', 'mysql', 'forceExit'])
+    .boolean(['alternative', 'mysql', 'forceExit'])
     .default('forceExit', true) // disable with --no-force-exit
     .default('limit', config.skipLimit)
     .default('fixableLimit', config.fixableLimit)
-		.alias('l', 'limit')
-		.alias('a', 'alternative')
-		.alias('f', 'folder')
-		.alias('m', 'mysql')
-		.argv;
+    .alias('l', 'limit')
+    .alias('a', 'alternative')
+    .alias('f', 'folder')
+    .alias('m', 'mysql')
+    .argv;
     
 var VIDEOS_BASE = argv.folder || config.defaultFolder;
 
@@ -55,9 +55,9 @@ if (argv.mysql) {
 }
 
 db.query(argv.alternative ?
-	'CREATE TABLE IF NOT EXISTS hashes (hash1 INTEGER UNSIGNED, hash2 INTEGER UNSIGNED, hash3 INTEGER UNSIGNED, video INTEGER UNSIGNED, PRIMARY KEY (hash1, hash2, hash3))' :
-	'CREATE TABLE IF NOT EXISTS hashes (hash1 INTEGER UNSIGNED, hash2 INTEGER UNSIGNED, video INTEGER UNSIGNED, PRIMARY KEY (hash1, hash2))'
-	, function (err) {
+  'CREATE TABLE IF NOT EXISTS hashes (hash1 INTEGER UNSIGNED, hash2 INTEGER UNSIGNED, hash3 INTEGER UNSIGNED, video INTEGER UNSIGNED, PRIMARY KEY (hash1, hash2, hash3))' :
+  'CREATE TABLE IF NOT EXISTS hashes (hash1 INTEGER UNSIGNED, hash2 INTEGER UNSIGNED, video INTEGER UNSIGNED, PRIMARY KEY (hash1, hash2))'
+  , function (err) {
   if (err) {throw err;}
   
 db.query('CREATE TABLE IF NOT EXISTS videos (videoid INTEGER UNSIGNED PRIMARY KEY, file TEXT)', function () {
@@ -68,50 +68,50 @@ console.log('>> WITA? > What is that anime?');
 console.log('> Video to Database Processor');
 
 glob('*.@(mp4|avi|mkv)', {
-	cwd: VIDEOS_BASE,
+  cwd: VIDEOS_BASE,
   matchBase: true
 }, function (err, files) {
-	var nextId = 1;
+  var nextId = 1;
   var currentTask = 1;
   if (err) {throw err;}
-	db.query('SELECT * FROM `videos`', function (err, data) {
-		if (err) {throw err;}
-		
-		if (data.length) {
-			currentTask = nextId = 1 + (+data.sort(function (a, b) {
-				return +b[videoIdKey] - +a[videoIdKey];
-			})[0][videoIdKey]);
-		}
-		
-		data = data.map(function(e) {return e[fileKey].replace(/\.(mp4|avi|mkv)$/, ''); });
-		
-		var filesTotal = files.length;
-		
-		files = files.filter(function (e) {
-			return -1 === data.indexOf(path.basename(path.join(VIDEOS_BASE, e)).replace(/\.(mp4|avi|mkv)$/, '')) &&
+  db.query('SELECT * FROM `videos`', function (err, data) {
+    if (err) {throw err;}
+    
+    if (data.length) {
+      currentTask = nextId = 1 + (+data.sort(function (a, b) {
+        return +b[videoIdKey] - +a[videoIdKey];
+      })[0][videoIdKey]);
+    }
+    
+    data = data.map(function(e) {return e[fileKey].replace(/\.(mp4|avi|mkv)$/, ''); });
+    
+    var filesTotal = files.length;
+    
+    files = files.filter(function (e) {
+      return -1 === data.indexOf(path.basename(path.join(VIDEOS_BASE, e)).replace(/\.(mp4|avi|mkv)$/, '')) &&
         config.blacklist.reduce(function (result, element) {
           return result && -1 === e.indexOf(element);
         }, true);
-		});
-		
-		var currentIndex = files.length, temporaryValue, randomIndex;
+    });
+    
+    var currentIndex = files.length, temporaryValue, randomIndex;
 
-		// Shuffle elements in order to keep database even:
-		while (0 !== currentIndex) {
-			randomIndex = Math.floor(Math.random() * currentIndex);
-			currentIndex -= 1;
+    // Shuffle elements in order to keep database even:
+    while (0 !== currentIndex) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
 
-			temporaryValue = files[currentIndex];
-			files[currentIndex] = files[randomIndex];
-			files[randomIndex] = temporaryValue;
-		}
-		
-		(function fileProcessLoop(id) {
-			var file = files.shift();
+      temporaryValue = files[currentIndex];
+      files[currentIndex] = files[randomIndex];
+      files[randomIndex] = temporaryValue;
+    }
+    
+    (function fileProcessLoop(id) {
+      var file = files.shift();
       currentTask++;
       
-			if (!file) {
-				console.log('All files processed.');
+      if (!file) {
+        console.log('All files processed.');
         
         // Give some time to all processes to end
         // Use .unref() to fast exit when possible
@@ -130,17 +130,17 @@ glob('*.@(mp4|avi|mkv)', {
             }, 120e3).unref();
           }
         }, 30e3, 0).unref();
-				return;
-			}
-			var videoPath = path.join(VIDEOS_BASE, file);
-			savingState++;
+        return;
+      }
+      var videoPath = path.join(VIDEOS_BASE, file);
+      savingState++;
       
-			console.log('> ' + files.length + ' file' + (files.length === 1 ? '' : 's') + ' remaining ~ ' +
+      console.log('> ' + files.length + ' file' + (files.length === 1 ? '' : 's') + ' remaining ~ ' +
         ((filesTotal - files.length) * 100 / filesTotal | 0) + '% completed ~ ' + (filesTotal - files.length) + ' files processed\n');
-			processVideo(videoPath, function (err, hashes) {
-				if (!err && hashes && hashes.length){
+      processVideo(videoPath, function (err, hashes) {
+        if (!err && hashes && hashes.length){
           console.log('> ' + (file.length > 70 ? ('...' + file.substr(-67)) : file) + ' is being saved');
-					(function insertLoop() {
+          (function insertLoop() {
             var queryTimeout, timeoutCount = 0;
             if (!argv.mysql) {
               queryTimeout = setInterval(function () {
@@ -153,8 +153,8 @@ glob('*.@(mp4|avi|mkv)', {
                 }
               }, 10e3);
             }
-						
-						db.query(transationStartQuery);
+            
+            db.query(transationStartQuery);
               
             if (argv.mysql) {
               db.query('INSERT INTO `videos` VALUES (?, ?)', [id, path.basename(videoPath)], afterVideoInserted);
@@ -221,69 +221,69 @@ glob('*.@(mp4|avi|mkv)', {
                 });
               }
             }
-					}());
-				} else {
+          }());
+        } else {
           console.log('> ' + (file.length > 70 ? ('...' + file.substr(-67)) : file) + ' failed');
         }
-				
-				fileProcessLoop(id + 1);
-			});
-		}(nextId));
-	});
+        
+        fileProcessLoop(id + 1);
+      });
+    }(nextId));
+  });
 });
 
 }); });
 
 function processVideo (videoPath, callback) {
-	var foundHashes = [];
-	var processingEnded = 0;
-	var frameCount = 0;
-	var hashesFound = 0;
-	
-	var start = Date.now();
-	var speed = '?';
-	var partialSpeed = 0;
+  var foundHashes = [];
+  var processingEnded = 0;
+  var frameCount = 0;
+  var hashesFound = 0;
+  
+  var start = Date.now();
+  var speed = '?';
+  var partialSpeed = 0;
   var showSpeedStat = function () {
-		frameCount += (speed = partialSpeed);
-		partialSpeed = 0;
-		process.stdout.write('\033[2K\033[0G> ' + frameCount + ' frames found ~ ' + speed + ' fps ');
-	};
-	var speedInterval = setInterval(showSpeedStat, 1000);
-	
-	var ttyWidth = (process.stdout.isTTY ? process.stdout.columns : 100) - 13; // from 'processing'
-	console.log(' Processing', videoPath.length > ttyWidth ? ('...' + videoPath.substr(-ttyWidth + 3)) : videoPath);
+    frameCount += (speed = partialSpeed);
+    partialSpeed = 0;
+    process.stdout.write('\033[2K\033[0G> ' + frameCount + ' frames found ~ ' + speed + ' fps ');
+  };
+  var speedInterval = setInterval(showSpeedStat, 1000);
+  
+  var ttyWidth = (process.stdout.isTTY ? process.stdout.columns : 100) - 13; // from 'processing'
+  console.log(' Processing', videoPath.length > ttyWidth ? ('...' + videoPath.substr(-ttyWidth + 3)) : videoPath);
   showSpeedStat();
   
-	var ffmpegProcess = spawn('ffmpeg', argv.alternative ? [
-		'-i', videoPath,
-		'-vf', 'fps=fps=3,format=gray,scale=9x8',
-		'-vsync', '0',
-		'-f', 'image2pipe',
-		'-vcodec', 'png',
-		'pipe:1',
+  var ffmpegProcess = spawn('ffmpeg', argv.alternative ? [
+    '-i', videoPath,
+    '-vf', 'fps=fps=3,format=gray,scale=9x8',
+    '-vsync', '0',
+    '-f', 'image2pipe',
+    '-vcodec', 'png',
+    'pipe:1',
     
-		'-i', videoPath, // 3fps = 3hz = www.3hz.co.jp
-		'-vf', 'fps=fps=3,scale=2x2',
-		'-vsync', '0',
-		'-f', 'image2pipe',
-		'-vcodec', 'png',
-		'pipe:3'] : [
-		'-i', videoPath,
-		'-vf', 'fps=fps=3,scale=9x8,format=gray',
-		'-vsync', '0',
-		'-f', 'image2pipe',
-		'-vcodec', 'png',
-		'pipe:1'], {
+    '-i', videoPath, // 3fps = 3hz = www.3hz.co.jp
+    '-vf', 'fps=fps=3,scale=2x2',
+    '-vsync', '0',
+    '-f', 'image2pipe',
+    '-vcodec', 'png',
+    'pipe:3'] : [
+    '-i', videoPath,
+    '-vf', 'fps=fps=3,scale=9x8,format=gray',
+    '-vsync', '0',
+    '-f', 'image2pipe',
+    '-vcodec', 'png',
+    'pipe:1'], {
       stdio: argv.alternative ? ['pipe', 'pipe', 'pipe', 'pipe'] : null
     });
-		
-	var errorBuffer = '';
-	
-	ffmpegProcess.stderr.setEncoding('utf-8');
-	ffmpegProcess.stderr.on('data', function (data) {
-		errorBuffer += data;
-	});
-	
+    
+  var errorBuffer = '';
+  
+  ffmpegProcess.stderr.setEncoding('utf-8');
+  ffmpegProcess.stderr.on('data', function (data) {
+    errorBuffer += data;
+  });
+  
   if (argv.alternative) {
     var dhashIndex = 0;
     ffmpegProcess.stdout.on('data', function (data) {
@@ -315,28 +315,28 @@ function processVideo (videoPath, callback) {
       });
     });
   }
-	
-	ffmpegProcess.on('close', function(exitCode) {
-		clearInterval(speedInterval);
-		if (exitCode !== 0) {
-			process.stdout.write('> FAILED: exit code ' + exitCode + /* '\n' + errorBuffer + */ ' ');
-		}
-		console.log('> Finalized after', ((Date.now() - start) / 1000).toFixed(1), 'seconds');
+  
+  ffmpegProcess.on('close', function(exitCode) {
+    clearInterval(speedInterval);
+    if (exitCode !== 0) {
+      process.stdout.write('> FAILED: exit code ' + exitCode + /* '\n' + errorBuffer + */ ' ');
+    }
+    console.log('> Finalized after', ((Date.now() - start) / 1000).toFixed(1), 'seconds');
     process.stdout.write('\033[1F'); // Avoid line mismatch
-		setTimeout(next, exitCode !== 0 ? 0 : 10e3);
-	});
-	
-	function next () {
-		if (processingEnded !== 0) {
-			return;
-		}
-		processingEnded++;
-		
-		foundHashes = foundHashes.filter(function (e, n, a) {
-			return n === a.indexOf(e);
-		});
-		
+    setTimeout(next, exitCode !== 0 ? 0 : 10e3);
+  });
+  
+  function next () {
+    if (processingEnded !== 0) {
+      return;
+    }
+    processingEnded++;
+    
+    foundHashes = foundHashes.filter(function (e, n, a) {
+      return n === a.indexOf(e);
+    });
+    
     process.stdout.write('\033[1E'); // Avoid line mismatch
-		setImmediate(callback, null, foundHashes);
-	}
+    setImmediate(callback, null, foundHashes);
+  }
 }
