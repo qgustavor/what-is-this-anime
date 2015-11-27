@@ -60,7 +60,7 @@ from the image encoded in 8bit, for color information.
 ## Database dumps:
 
 There are database dumps for MySQL (images and subtitles) and SQLite (images, old schema)
-[in this MEGA folder](https://mega.nz/#F!X5t0DKhC) (key: `WhatIsThisAnime-DBDATA`).
+[in this MEGA folder](https://mega.nz/#F!O0UgGY4I) (key: `WhatIsThisAnime-DBDATA`).
 
 ## License:
 
