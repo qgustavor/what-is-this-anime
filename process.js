@@ -64,7 +64,7 @@ db.query('CREATE TABLE IF NOT EXISTS videos (videoid INTEGER UNSIGNED PRIMARY KE
 
 // Clear screen:
 // process.stdout.write('\u001b[2J\u001b[0;0H');
-console.log('>> WITA? > What is that anime?');
+console.log('>> WITA? > What is this anime?');
 console.log('> Video to Database Processor');
 
 glob('*.@(mp4|avi|mkv)', {

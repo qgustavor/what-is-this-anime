@@ -16,7 +16,7 @@ var VIDEOS_BASE = argv.folder || config.defaultFolder;
 db.query('CREATE TABLE IF NOT EXISTS videos (id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY, file VARCHAR(200), subtitles TEXT, FULLTEXT (subtitles))', function (err) {
   if (err) {throw err;}
 
-console.log('>> WITA? > What is that anime?');
+console.log('>> WITA? > What is this anime?');
 console.log('> Video to Database Processor');
 console.log('> Subtitle extractor');
 

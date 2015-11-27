@@ -19,7 +19,7 @@ var distance = argv.alternative ? alternativeDistance : hammingDistance;
 
 // Clear screen:
 // process.stdout.write('\u001b[2J\u001b[0;0H');
-console.log('>> WITA? > What is that anime?');
+console.log('>> WITA? > What is this anime?');
 console.log('> Image to video comparer');
 
 if (argv._.length === 2) {

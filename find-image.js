@@ -41,7 +41,7 @@ if (argv.mysql) {
   
 // Clear screen:
 // process.stdout.write('\u001b[2J\u001b[0;0H');
-console.log('>> WITA? > What is that anime?');
+console.log('>> WITA? > What is this anime?');
 console.log('> Image hash finder');
 
 var image = argv._[0];

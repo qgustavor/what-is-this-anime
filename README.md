@@ -1,4 +1,4 @@
-# What is that anime?
+# What is this anime?
 
 A video and subtitle search tool inspired by anime.
 
@@ -7,7 +7,7 @@ A video and subtitle search tool inspired by anime.
 As those tools were never intended to be released maybe installing can be a bit hard.
 
 1. install Node, FFmpeg and (optional) SQLite, keep those available in PATH
-2. `git clone qgustavor/what-is-that-anime`
+2. `git clone qgustavor/what-is-this-anime`
 3. `npm install`
 4. edit config.js
 
@@ -60,8 +60,8 @@ from the image encoded in 8bit, for color information.
 ## Database dumps:
 
 There are database dumps for MySQL (images and subtitles) and SQLite (images, old schema)
-[in this MEGA folder](https://mega.nz/#F!X5t0DKhC) (key: `WhatIsThatAnime-DBDATA`).
+[in this MEGA folder](https://mega.nz/#F!X5t0DKhC) (key: `WhatIsThisAnime-DBDATA`).
 
 ## License:
 
-[MIT License](https://github.com/qgustavor/what-is-that-anime/blob/master/LICENSE).
+[MIT License](https://github.com/qgustavor/what-is-this-anime/blob/master/LICENSE).
