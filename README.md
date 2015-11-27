@@ -7,7 +7,7 @@ A video and subtitle search tool inspired by anime.
 As those tools were never intended to be released maybe installing can be a bit hard.
 
 1. install Node, FFmpeg and (optional) SQLite, keep those available in PATH
-2. `git clone qgustavor/what-is-this-anime`
+2. `git clone https://github.com/qgustavor/what-is-this-anime.git`
 3. `npm install`
 4. edit config.js
 
