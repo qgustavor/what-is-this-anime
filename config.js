@@ -7,7 +7,7 @@ module.exports = {
   // Maximum relation between number of failed frames and the total
   skipLimit: 0.01,
   
-  // Maximum value allowed for the relation above for an retry
+  // Maximum value allowed for the relation above for a retry
   fixableLimit: 0.5,
   
   // MySQL database config:
