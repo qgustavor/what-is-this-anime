@@ -9,7 +9,7 @@ var argv = require('yargs')
     .alias('f', 'folder')
     .argv;
     
-var db = mysql.createConnection(config.databaseConfig);
+var db = mysql.createConnection(config.mysqlConfig.subtitles);
 
 var VIDEOS_BASE = argv.folder || config.defaultFolder;
 
