@@ -40,7 +40,7 @@ Finds an image in database.
     -a --alternative Uses alternative method
     -m --mysql       Uses MySQL database
     -s --simple      Don't use thresholds, instead find exact results and exit
-    -f --first       Exists on first result
+    -f --first       Exits on first result
     --no-partial     Don't try to find partial hashes
     
 ### Video to image comparer (compare-mode.js):
