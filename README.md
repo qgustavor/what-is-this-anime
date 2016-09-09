@@ -16,6 +16,7 @@ As those tools were never intended to be released maybe installing can be a bit 
 ### Video Indexer (process.js):
 
 Populates the database with image hashes (based on [dhash](https://www.npmjs.com/package/dhash/)).
+Indexing can be automated by calling this script in cron, task scheduler or similar.
 
     node process
     
@@ -25,7 +26,8 @@ Populates the database with image hashes (based on [dhash](https://www.npmjs.com
     
 ### Subtitle Indexer (subtitle-process.js):
 
-Populates the database with anime images. Only supports MySQL databases.
+Populates the database with anime images. Only supports MySQL databases. Note that there
+isn't no "Subtitle Finder" script, but a simple SQL select can be used for that.
 
     node subtitle-process
     
@@ -42,6 +44,24 @@ Finds an image in database.
     -s --simple      Don't use thresholds, instead find exact results and exit
     -f --first       Exits on first result
     --no-partial     Don't try to find partial hashes
+    
+Output format (for alternative method):
+
+    First line: image info
+    >> 12345678 12345678 12345678 <- target hash
+    The first two are the dhash, the third is the color information
+
+    Subsequent lines: result info:
+    >> 12345678  2 Sintel.mkv
+    >> 12345678  3 Big Buck Bunny.mkv
+    The first number is the color information, then the hamming distance, then the file name.
+    
+The output format for the old (and still default, to not break compatibility) method is
+almost the same, but without color information for the image and results.
+    
+You can compare color information between image and results by entering color values in
+[this tool](https://codepen.io/qgustavor/full/eNxpPQ) (use 0x prefix, as those numbers
+are encoded in hexadecimal; example: if the script returns '12345678' then use '0x12345678').
     
 ### Video to image comparer (compare-mode.js):
 
