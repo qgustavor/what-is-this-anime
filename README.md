@@ -13,7 +13,7 @@ As those tools were never intended to be released maybe installing can be a bit 
 5. run `node process` to index files on your computer
 6. run `node find-image [image path]` to find a image
 
-If you think those steps are too hard I reccomend using [this website](https://whatanime.ga/) (not by me)
+If you think those steps are too hard I recommend using [this website](https://whatanime.ga/) (not by me)
 which also allows searching anime by image, is simple to use and a lot faster than the scripts on this
 repository, but don't index old anime and seems is just a bit less precise (checks only color, while
 here we check for shape then color).
