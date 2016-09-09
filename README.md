@@ -61,7 +61,7 @@ almost the same, but without color information for the image and results.
     
 You can compare color information between image and results by entering color values in
 [this tool](https://codepen.io/qgustavor/full/eNxpPQ) (use 0x prefix, as those numbers
-are encoded in hexadecimal; example: if the script returns '12345678' then use '0x12345678').
+are encoded in hexadecimal; example: if the script returns `12345678` then use `0x12345678`).
     
 ### Video to image comparer (compare-mode.js):
 
