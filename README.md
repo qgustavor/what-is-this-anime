@@ -92,3 +92,4 @@ There are database dumps for MySQL (images and subtitles) and SQLite (images, ol
 ## License:
 
 [MIT License](https://github.com/qgustavor/what-is-this-anime/blob/master/LICENSE).
+I'm not a lawyer, if there are problems using this license just open a issue pointing that.
