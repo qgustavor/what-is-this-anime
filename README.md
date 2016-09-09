@@ -10,6 +10,13 @@ As those tools were never intended to be released maybe installing can be a bit 
 2. `git clone https://github.com/qgustavor/what-is-this-anime.git`
 3. `npm install`
 4. edit config.js
+5. run `node process` to index files on your computer
+6. run `node find-image [image path]` to find a image
+
+If you think those steps are too hard I reccomend using [this website](https://whatanime.ga/) (not by me)
+which also allows searching anime by image, is simple to use and a lot faster than the scripts on this
+repository, but don't index old anime and seems is just a bit less precise (checks only color, while
+here we check for shape then color).
 
 ## Usage:
 
@@ -37,7 +44,7 @@ isn't no "Subtitle Finder" script, but a simple SQL select can be used for that.
 
 Finds an image in database.
 
-    node find-mode [image-file] [threshold]
+    node find-image [image-file] [threshold]
     
     -a --alternative Uses alternative method
     -m --mysql       Uses MySQL database
