@@ -10,7 +10,7 @@ As those tools were never intended to be released maybe installing can be a bit 
 2. `git clone https://github.com/qgustavor/what-is-this-anime.git`
 3. `npm install`
 4. edit config.js
-5. run `node process` to index files on your computer
+5. run `node process` to index files in your computer
 6. run `node find-image [image path]` to find a image
 
 If you think those steps are too hard I recommend using [this website](https://whatanime.ga/) (not by me)
