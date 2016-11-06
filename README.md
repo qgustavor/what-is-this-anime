@@ -15,8 +15,7 @@ As those tools were never intended to be released maybe installing can be a bit 
 
 If you think those steps are too hard I recommend using [this website](https://whatanime.ga/) (not by me)
 which also allows searching anime by image, is simple to use and a lot faster than the scripts on this
-repository, but don't index old anime and seems is just a bit less precise (checks only color, while
-here we check for shape then color).
+repository.
 
 ## Usage:
 
