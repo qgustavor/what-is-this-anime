@@ -32,7 +32,7 @@ Indexing can be automated by calling this script in cron, task scheduler or simi
     
 ### Subtitle Indexer (subtitle-process.js):
 
-Populates the database with anime images. Only supports MySQL databases. Note that there
+Populates the database with subtitle lines. Only supports MySQL databases. Note that there
 isn't no "Subtitle Finder" script, but a simple SQL select can be used for that.
 
     node subtitle-process
